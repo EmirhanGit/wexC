@@ -5,7 +5,74 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+        }
+
+        .container {
+            background-color: white;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            gap: 20px;
+            color: black;
+
+        }
+
+        #bar-top {
+            grid-column: span 3 / span 3;
+            background-color: grey;
+        }
+
+        #bar-left {
+            grid-row-start: 2;
+            background-color: grey;
+
+        }
+
+        #bar-right {
+            grid-column-start: 3;
+            grid-row-start: 2;
+            background-color: grey;
+
+        }
+
+        #bar-bottom {
+            grid-column: span 3 / span 3;
+            grid-row-start: 3;
+            background-color: grey;
+
+        }
+    </style>
     <script>
+        const activeColor = "#00DDED";
+        const neutralColor = "grey";
+        const betaThreshold = 15; // nach vorne/hinten
+        const gammaThreshold = 15; // nach links/rechts
+
+        function updateBars(beta, gamma) {
+            // alle zurücksetzen
+            document.getElementById("bar-top").style.backgroundColor = neutralColor;
+            document.getElementById("bar-bottom").style.backgroundColor = neutralColor;
+            document.getElementById("bar-left").style.backgroundColor = neutralColor;
+            document.getElementById("bar-right").style.backgroundColor = neutralColor;
+
+            // Neigung prüfen
+            if (beta > betaThreshold) {
+                document.getElementById("bar-bottom").style.backgroundColor = activeColor;
+            } else if (beta < -betaThreshold) {
+                document.getElementById("bar-top").style.backgroundColor = activeColor;
+            }
+
+            if (gamma > gammaThreshold) {
+                document.getElementById("bar-right").style.backgroundColor = activeColor;
+            } else if (gamma < -gammaThreshold) {
+                document.getElementById("bar-left").style.backgroundColor = activeColor;
+            }
+        }
+
         function requestOrientation() {
             if (typeof DeviceOrientationEvent.requestPermission === 'function') {
                 DeviceOrientationEvent.requestPermission()
@@ -14,6 +81,8 @@
                             window.addEventListener('deviceorientation', event => {
                                 document.getElementById('demo').innerHTML =
                                     `Alpha: ${event.alpha}<br>Beta: ${event.beta}<br>Gamma: ${event.gamma}`;
+
+                                updateBars(event.beta, event.gamma);
                             });
                         } else {
                             alert('Permission not granted');
@@ -24,6 +93,8 @@
                 window.addEventListener('deviceorientation', event => {
                     document.getElementById('demo').innerHTML =
                         `Alpha: ${event.alpha}<br>Beta: ${event.beta}<br>Gamma: ${event.gamma}`;
+
+                    updateBars(event.beta, event.gamma);
                 });
             }
         }
@@ -38,6 +109,14 @@
 
     </p>
     <button onclick="requestOrientation()">Enable motion</button>
+
+    <div class="container">
+        <div id="bar-top" class="bar">top</div>
+        <div id="bar-bottom" class="bar">bottom</div>
+        <div id="bar-left" class="bar">left</div>
+        <div id="bar-right" class="bar">right</div>
+    </div>
+
 </body>
 
 </html>
