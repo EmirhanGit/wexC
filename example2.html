@@ -49,27 +49,25 @@
     <script>
         const activeColor = "#00DDED";
         const neutralColor = "grey";
-        const betaThreshold = 15; // nach vorne/hinten
-        const gammaThreshold = 15; // nach links/rechts
+        const betaThreshold = 15; 
+        const gammaThreshold = 15;
 
         function updateBars(beta, gamma) {
-            // alle zurücksetzen
             document.getElementById("bar-top").style.backgroundColor = neutralColor;
             document.getElementById("bar-bottom").style.backgroundColor = neutralColor;
             document.getElementById("bar-left").style.backgroundColor = neutralColor;
             document.getElementById("bar-right").style.backgroundColor = neutralColor;
 
-            // Neigung prüfen
             if (beta > betaThreshold) {
-                document.getElementById("bar-bottom").style.backgroundColor = activeColor;
+                document.getElementById("bar-left").style.backgroundColor = activeColor;
             } else if (beta < -betaThreshold) {
-                document.getElementById("bar-top").style.backgroundColor = activeColor;
+                document.getElementById("bar-left").style.backgroundColor = activeColor;
             }
 
             if (gamma > gammaThreshold) {
-                document.getElementById("bar-right").style.backgroundColor = activeColor;
+                document.getElementById("bar-bottom").style.backgroundColor = activeColor;
             } else if (gamma < -gammaThreshold) {
-                document.getElementById("bar-left").style.backgroundColor = activeColor;
+                document.getElementById("bar-top").style.backgroundColor = activeColor;
             }
         }
 
