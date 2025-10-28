@@ -6,12 +6,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script>
-    
-        window.addEventListener("deviceorientation", (event) => {
-            console.log(`${event.alpha} : ${event.beta} : ${event.gamma}`);
-            document.getElementById("demo").innerHTML = `Alpha: ${event.alpha}<br>Beta: ${event.beta}<br>Gamma: ${event.gamma}`;
-
-        });
+        function requestOrientation() {
+            if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+                DeviceOrientationEvent.requestPermission()
+                    .then(response => {
+                        if (response === 'granted') {
+                            window.addEventListener('deviceorientation', event => {
+                                document.getElementById('demo').innerHTML =
+                                    `Alpha: ${event.alpha}<br>Beta: ${event.beta}<br>Gamma: ${event.gamma}`;
+                            });
+                        } else {
+                            alert('Permission not granted');
+                        }
+                    })
+                    .catch(console.error);
+            } else {
+                window.addEventListener('deviceorientation', event => {
+                    document.getElementById('demo').innerHTML =
+                        `Alpha: ${event.alpha}<br>Beta: ${event.beta}<br>Gamma: ${event.gamma}`;
+                });
+            }
+        }
     </script>
 </head>
 
@@ -22,6 +37,7 @@
     <p id="demo">
 
     </p>
+    <button onclick="requestOrientation()">Enable motion</button>
 </body>
 
 </html>
