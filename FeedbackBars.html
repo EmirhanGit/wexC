@@ -18,7 +18,9 @@
             grid-template-rows: repeat(3, 1fr);
             gap: 20px;
             color: black;
-
+            position: relative;
+            height: 400px;
+            place-items: center;
         }
 
         #bar-top {
@@ -29,27 +31,37 @@
         #bar-left {
             grid-row-start: 2;
             background-color: grey;
-
         }
 
         #bar-right {
             grid-column-start: 3;
             grid-row-start: 2;
             background-color: grey;
-
         }
 
         #bar-bottom {
             grid-column: span 3 / span 3;
             grid-row-start: 3;
             background-color: grey;
+        }
 
+        /* Neuer Punkt in der Mitte */
+        #dot {
+            grid-column-start: 2;
+            grid-row-start: 2;
+            width: 40px;
+            height: 40px;
+            background-color: #00DDED;
+            border-radius: 50%;
+            transition: transform 0.2s ease;
+            z-index: 10;
         }
     </style>
+
     <script>
         const activeColor = "#00DDED";
         const neutralColor = "grey";
-        const betaThreshold = 15; 
+        const betaThreshold = 15;
         const gammaThreshold = 15;
 
         function updateBars(beta, gamma) {
@@ -69,6 +81,24 @@
             } else if (gamma < -gammaThreshold) {
                 document.getElementById("bar-top").style.backgroundColor = activeColor;
             }
+
+            moveDot(beta, gamma);
+        }
+
+        function moveDot(beta, gamma) {
+            const dot = document.getElementById("dot");
+            let x = 0;
+            let y = 0;
+
+            // Oben/unten anhand Gamma
+            if (gamma > gammaThreshold) y = 50;      // unten
+            else if (gamma < -gammaThreshold) y = -50; // oben
+
+            // Links/rechts anhand Beta
+            if (beta > betaThreshold) x = -50;       // links
+            else if (beta < -betaThreshold) x = 50;   // rechts
+
+            dot.style.transform = `translate(${x}px, ${y}px)`;
         }
 
         function requestOrientation() {
@@ -79,7 +109,6 @@
                             window.addEventListener('deviceorientation', event => {
                                 document.getElementById('demo').innerHTML =
                                     `Alpha: ${event.alpha}<br>Beta: ${event.beta}<br>Gamma: ${event.gamma}`;
-
                                 updateBars(event.beta, event.gamma);
                             });
                         } else {
@@ -91,7 +120,6 @@
                 window.addEventListener('deviceorientation', event => {
                     document.getElementById('demo').innerHTML =
                         `Alpha: ${event.alpha}<br>Beta: ${event.beta}<br>Gamma: ${event.gamma}`;
-
                     updateBars(event.beta, event.gamma);
                 });
             }
@@ -100,12 +128,8 @@
 </head>
 
 <body>
-    <h1>
-        test
-    </h1>
-    <p id="demo">
-
-    </p>
+    <h1>test</h1>
+    <p id="demo"></p>
     <button onclick="requestOrientation()">Enable motion</button>
 
     <div class="container">
@@ -113,8 +137,10 @@
         <div id="bar-bottom" class="bar">bottom</div>
         <div id="bar-left" class="bar">left</div>
         <div id="bar-right" class="bar">right</div>
-    </div>
 
+        <!-- Punkt in der Mitte -->
+        <div id="dot"></div>
+    </div>
 </body>
 
 </html>
