@@ -4,21 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Feedbackbars</title>
     <style>
-        body {
-            background-color: black;
-            color: white;
-        }
+        body {}
 
         .container {
-            background-color: white;
+            background-color: lightgray;
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            grid-template-rows: repeat(3, 1fr);
-            gap: 20px;
-            color: black;
-            position: relative;
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-rows: 1fr 1fr 1fr;
             height: 400px;
             place-items: center;
         }
@@ -45,14 +39,22 @@
             background-color: grey;
         }
 
-        /* Neuer Punkt in der Mitte */
+        #bar-top,
+        #bar-bottom {
+            width: 100px;
+        }
+
+        #bar-left,
+        #bar-right {
+            width: 100px;
+        }
+
         #dot {
             grid-column-start: 2;
             grid-row-start: 2;
             width: 40px;
             height: 40px;
             background-color: #00DDED;
-            border-radius: 50%;
             transition: transform 0.2s ease;
             z-index: 10;
         }
@@ -90,13 +92,11 @@
             let x = 0;
             let y = 0;
 
-            // Oben/unten anhand Gamma
-            if (gamma > gammaThreshold) y = 50;      // unten
-            else if (gamma < -gammaThreshold) y = -50; // oben
+            if (gamma > gammaThreshold) y = 50;      
+            else if (gamma < -gammaThreshold) y = -50; 
 
-            // Links/rechts anhand Beta
-            if (beta > betaThreshold) x = -50;       // links
-            else if (beta < -betaThreshold) x = 50;   // rechts
+            if (beta > betaThreshold) x = -50;      
+            else if (beta < -betaThreshold) x = 50;   
 
             dot.style.transform = `translate(${x}px, ${y}px)`;
         }
@@ -128,7 +128,7 @@
 </head>
 
 <body>
-    <h1>test</h1>
+    <h1>Feedbackbars</h1>
     <p id="demo"></p>
     <button onclick="requestOrientation()">Enable motion</button>
 
@@ -138,7 +138,6 @@
         <div id="bar-left" class="bar">left</div>
         <div id="bar-right" class="bar">right</div>
 
-        <!-- Punkt in der Mitte -->
         <div id="dot"></div>
     </div>
 </body>
